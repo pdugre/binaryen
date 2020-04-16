@@ -79,11 +79,11 @@ jobs:
     - name: test
       run: python check.py --binaryen-bin=out/bin
 
-  build:
+  build-asan:
     name: Build Asan
     env:
-      ASAN_OPTIONS="detect_leaks=0 symbolize=1"
-      COMPILER_FLAGS="-fsanitize=address"
+      ASAN_OPTIONS: "detect_leaks=0 symbolize=1"
+      COMPILER_FLAGS: "-fsanitize=address"
     runs-on: ubuntu-latest
     steps:
     - uses: actions/setup-python@v1
