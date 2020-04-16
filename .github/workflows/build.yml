@@ -17,6 +17,12 @@ jobs:
     env:
         MY_VAR: Hi there! My name is
     steps:
+    - uses: actions/setup-python@v1
+      with:
+        python-version: '3.x'
+    - uses: actions/checkout@v1
+      with:
+        submodules: true
     - name: flake8
       run: |
         sudo apt-get install python3-pip
