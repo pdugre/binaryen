@@ -61,7 +61,7 @@ jobs:
       run: mkdir -p out
 
     - name: cmake (linux)
-      run: cmake -S . -B out -G Ninja -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILE=clang++
+      run: cmake -S . -B out -G Ninja -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
       if: matrix.os == 'ubuntu-latest'
 
     - name: cmake (osx)
@@ -97,7 +97,7 @@ jobs:
     - name: cmake
       run: |
         mkdir -p out
-        cmake -S . -B out -G Ninja -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILE=clang++ -DCMAKE_C_FLAGS="$COMPILER_FLAGS" -DCMAKE_CXX_FLAGS="$COMPILER_FLAGS"
+        cmake -S . -B out -G Ninja -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_FLAGS="$COMPILER_FLAGS" -DCMAKE_CXX_FLAGS="$COMPILER_FLAGS"
     - name: build
       run: cmake --build out
     - name: test
