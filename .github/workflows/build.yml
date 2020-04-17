@@ -12,7 +12,7 @@ on:
 jobs:
 
   lint:
-    name: Lint
+    name: lint
     runs-on: ubuntu-latest
     steps:
     - uses: actions/setup-python@v1
@@ -32,7 +32,7 @@ jobs:
     - run: ./scripts/clang-tidy-diff.sh
 
   build:
-    name: Build
+    name: build
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -142,7 +142,7 @@ jobs:
     - name: cmake
       run: |
         mkdir -p out
-        cmake -S . -B out -G Ninja -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_FLAGS="$COMPILER_FLAGS" -DCMAKE_CXX_FLAGS="$COMPILER_FLAGS -fsanitize-blacklist=$PWD/bsan.blacklist"
+        cmake -S . -B out -G Ninja -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_FLAGS="$COMPILER_FLAGS" -DCMAKE_CXX_FLAGS="$COMPILER_FLAGS -fsanitize-blacklist=$PWD/ubsan.blacklist"
     - name: build
       run: cmake --build out
     - name: test
@@ -188,7 +188,7 @@ jobs:
     - name: download cmake
       run: |
         mkdir $HOME/cmake
-        wget -qO- https://github.com/Kitware/CMake/releases/download/v3.17.0/cmake-3.17.0-Linux-x86_64.tar.gz | tar -x -C $HOME/cmake --strip-components 1
+        wget -qO- https://github.com/Kitware/CMake/releases/download/v3.17.0/cmake-3.17.0-Linux-x86_64.tar.gz | tar -xzC $HOME/cmake --strip-components 1
         echo "::add-path::$HOME/cmake/bin"
     - name: emsdk install
       run: |
