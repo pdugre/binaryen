@@ -80,7 +80,7 @@ jobs:
       run: python check.py --binaryen-bin=out/bin
 
   build-gcc:
-    name: Build gcc
+    name: gcc
     runs-on: ubuntu-latest
     steps:
     - uses: actions/setup-python@v1
@@ -101,7 +101,7 @@ jobs:
       run: python check.py --binaryen-bin=out/bin
 
   build-asan:
-    name: Build asan
+    name: asan
     runs-on: ubuntu-latest
     env:
       # FIXME we currently must disable LSAN entirely, see #1351
@@ -126,7 +126,7 @@ jobs:
       run: python check.py --binaryen-bin=out/bin
 
   build-ubsan:
-    name: Build ubsan
+    name: ubsan
     runs-on: ubuntu-latest
     env:
       COMPILER_FLAGS: "-fsanitize=undefined -fno-sanitize-recover=all"
@@ -149,7 +149,7 @@ jobs:
       run: python check.py --binaryen-bin=out/bin
 
   build-tsan:
-    name: Build tsan
+    name: tsan
     runs-on: ubuntu-latest
     env:
       COMPILER_FLAGS: "-fsanitize=thread"
@@ -171,3 +171,34 @@ jobs:
       run: cmake --build out
     - name: test
       run: python check.py --binaryen-bin=out/bin
+
+  # Build the .js outputs using emcc
+  build-emscripten:
+    name: emscipten
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-python@v1
+      with:
+        python-version: '3.x'
+    - uses: actions/checkout@v1
+      with:
+        submodules: true
+    - name: install ninja
+      run: sudo apt-get install ninja-build
+    - name: download cmake
+      run: |
+        mkdir $HOME/cmake
+        wget -qO- https://github.com/Kitware/CMake/releases/download/v3.17.0/cmake-3.17.0-Linux-x86_64.tar.gz | tar -x -C $HOME/cmake --strip-components 1
+        echo "::add-path::$HOME/cmake/bin"
+    - name: emsdk install
+      run: |
+        mkdir $HOME/emsdk
+        git clone --depth 1 https://github.com/emscripten-core/emsdk.git $HOME/emsdk
+        $HOME/emsdk/emsdk update-tags
+        $HOME/emsdk/emsdk install tot
+        $HOME/emsdk/emsdk activate tot
+        echo "::add-path::$HOME/emsdk"
+    - name: emcc-tests
+      run: |
+        source $HOME/emsdk/emsdk_env.sh
+        ./scripts/emcc-tests.sh
