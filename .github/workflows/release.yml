@@ -54,7 +54,7 @@ jobs:
     - name: archive
       id: archive
       run: |
-        export VERSION=$GITHUB_SHA
+        export VERSION=${{ github.ref }}
         export PKGNAME="binaryen-$VERSION-x86_64-${{ matrix.os }}"
         export TARBALL=$PKGNAME.tar.gz
         mv out/bin binaryen-$VERSION
@@ -83,3 +83,5 @@ jobs:
         asset_path: ./${{ steps.archive.outputs.asset_name }}
         asset_name: ${{ steps.archive.outputs.asset_name }}
         asset_content_type: application/gzip
+
+    - run: echo "${{ steps.create_release.outputs.upload_url }}
