@@ -1,9 +1,10 @@
 name: Upload Release Assets
 
-# Trigger whenever any tag is created
+# Trigger whenever a release is created
 on:
-  create:
-    tags:
+  release:
+    types:
+      - created
 
 jobs:
   build:
@@ -54,7 +55,7 @@ jobs:
     - name: archive
       id: archive
       run: |
-        export VERSION=${{ github.ref }}
+        export VERSION=${{ github.event.release.tag_name }}
         export PKGNAME="binaryen-$VERSION-x86_64-${{ matrix.os }}"
         export TARBALL=$PKGNAME.tar.gz
         mv out/bin binaryen-$VERSION
@@ -62,26 +63,13 @@ jobs:
         shasum -a 256 $TARBALL > $PKGNAME.tar.gz.sha256
         echo "::set-output name=asset_name::$TARBALL"
 
-    - name: create release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: true
-        prerelease: true
-
     - name: upload release asset
       id: upload-release-asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        upload_url: ${{ github.event.release.upload_url }}
         asset_path: ./${{ steps.archive.outputs.asset_name }}
         asset_name: ${{ steps.archive.outputs.asset_name }}
         asset_content_type: application/gzip
-
-    - run: echo "${{ steps.create_release.outputs.upload_url }}
