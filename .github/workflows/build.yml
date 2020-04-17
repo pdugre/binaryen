@@ -94,14 +94,16 @@ jobs:
         docker run -w /src -dit --name alpine -v $PWD:/src node:lts-alpine
         echo "docker exec -it alpine \"$@\";" > ./alpine.sh
         chmod +x ./alpine.sh
-    - name: start docker
-        - ./alpine.sh apk update
-        - ./alpine.sh apk add build-base cmake git python3 clang ninja
+    - name: install packages
+      run: |
+        ./alpine.sh apk update
+        ./alpine.sh apk add build-base cmake git python3 clang ninja
     - name: build
-        - ./alpine.sh cmake . -G Ninja
-        - ./alpine.sh ninja
+      run: |
+        ./alpine.sh cmake . -G Ninja
+        ./alpine.sh ninja
     - name: test
-        - ./alpine.sh python3 ./check.py
+      run: ./alpine.sh python3 ./check.py
 
   build-gcc:
     name: gcc
