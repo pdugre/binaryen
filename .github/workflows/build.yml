@@ -52,7 +52,7 @@ jobs:
     - name: archive
       id: archive
       run: |
-        exprot VERSION=1.0 #$GITHUB_SHA
+        export VERSION=1.0 #$GITHUB_SHA
         export PKGNAME="binaryen-$VERSION-linux"
         export TARBALL=$PKGNAME.tar.gz
         mv out/bin binaryen-$VERSION
