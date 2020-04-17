@@ -58,7 +58,7 @@ jobs:
         mv out/bin binaryen-$VERSION
         tar -czf $TARBALL binaryen-$VERSION
         shasum -a 256 $TARBALL > $PKGNAME.tar.gz.sha256
-        echo "::set-output name=assert_name::$TARBALL"
+        echo "::set-output name=asset_name::$TARBALL"
     - name: create release
       id: create_release
       uses: actions/create-release@v1
