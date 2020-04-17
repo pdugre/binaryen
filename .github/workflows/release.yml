@@ -58,7 +58,7 @@ jobs:
       id: archive
       run: |
         export VERSION=$GITHUB_SHA
-        export PKGNAME="binaryen-$VERSION-linux"
+        export PKGNAME="binaryen-$VERSION-x86_64-${{ matrix.os }}"
         export TARBALL=$PKGNAME.tar.gz
         mv out/bin binaryen-$VERSION
         tar -czf $TARBALL binaryen-$VERSION

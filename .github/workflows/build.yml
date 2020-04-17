@@ -2,8 +2,6 @@ name: CI
 
 # Trigger on pull_request or on push to master
 on:
-  create:
-    tags:
   push:
     branches:
       - master
@@ -202,4 +200,3 @@ jobs:
       run: |
         source $HOME/emsdk/emsdk_env.sh
         ./scripts/emcc-tests.sh
->>>>>>> parent of 893e6f3ab... .
